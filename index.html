@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+   <div id="root"></div>
+</body>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+    // react jsx문법에서 가장중요한것!
+    // 함수이름의 첫글자를 대문자로 할것!
+    const root =  document.getElementById("root");
+
+    // reactjs의 jsx에서는 for과 class는 htmlFor과 className이라 써야됨
+    function MinutesHours (){
+      const [minutes,setMinutes] = React.useState();
+      const [fliped,setFliped] = React.useState(false);
+      const onChange = (event)=>{
+        setMinutes(event.target.value);
+      };
+      const reset = ()=>{
+        setMinutes(0);
+      };
+      const onFlip = ()=>{
+        setFliped(!fliped);
+        reset()
+      };
+    return(
+      <div>
+        <div>
+          <input 
+            value= {!fliped ?  minutes : minutes * 60  }
+            disabled={fliped} 
+            onChange={onChange} 
+            id ="minutes" 
+            placeholder ="minutes" 
+            type="number"/>
+          <label htmlFor="minutes">Minutes</label>
+        </div>
+
+        <div>
+          <input
+            value={fliped? minutes : Math.round(minutes / 60) }
+            disabled={!fliped}
+            onChange={onChange} 
+            id ="hours" 
+            placeholder="hours" 
+            type="number"/>
+          <label htmlFor="hours">Hours</label>
+        </div>
+        <button onClick={reset}>reset</button>
+        <button onClick={onFlip}>flip</button>
+      </div>
+    )
+    }
+
+    function KmMiles(){
+      const [km,setKm] = React.useState();
+      const [invered,setInvered] = React.useState(false);
+      const onChange = (event)=>{
+        setKm(event.target.value);
+      };
+      const onReset = ()=>{
+        setKm(0);
+      };
+      const onInvered= ()=>{
+        setInvered(!invered);
+        onReset()
+      };
+      return(
+      <div>
+        <div>
+        <input 
+          disabled={invered}
+          onChange={onChange}
+          value={!invered ? km : km * 1609}
+          placeholder="km"
+          id= "km"
+          type="number"/>
+        <label for="km">km</label>
+        </div>
+
+        <div>
+          <input 
+            disabled={!invered}
+            onChange={onChange}
+            value={invered ? km : Math.round(km / 1609)}
+            placeholder="miles"
+            id="miles"
+            type="number"/>
+          <label for="miles">miles</label>
+        </div>
+        <button onClick={onReset}>reset</button>
+        <button onClick={onInvered}>flip</button>
+       
+      </div>
+    )
+    }
+
+    // 다른 두개의 컴포넌트를 랜더링해주는 컴포넌트
+    //자바스크립트 문법 사용할 때는 {이안에 쓰면됌}
+    function App (){
+    const [index,setIndex] = React.useState("0");
+    const onSelct= (event)=>{
+      setIndex(event.target.value);
+    }
+    return(
+      <div>
+        <h3>Super Converter</h3>
+        <select value={index} onChange={onSelct}>
+          <option value="0">MinutesHours</option>
+          <option value="1">KmMiles</option>
+        </select>
+        {index === "0" ? <MinutesHours /> : null}
+        {index === "1" ? <KmMiles /> : null}
+      </div>
+    )
+    }
+  // app을 랜더링해주는 root
+  ReactDOM.render(<App />,root);
+</script>
+</html>
